@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f4ead6">
+<title>平行人生販賣機｜Parallel Life Vending Machine</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+:root{
+  --cream:#f4ead6;--paper:#fff8e9;--ink:#253d32;--green:#315846;
+  --green2:#55745b;--orange:#d85b3d;--yellow:#e9b85f;--line:#c9b99b;
+  --muted:#827b68;--shadow:rgba(49,61,48,.14);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:"Noto Sans TC",sans-serif;min-height:100vh;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;z-index:-1;background-image:radial-gradient(#806f51 .65px,transparent .65px);background-size:7px 7px}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--orange);outline-offset:4px}
+.topbar{max-width:1180px;margin:auto;padding:24px 5vw 10px;display:flex;justify-content:space-between;align-items:center}
+.brand{font-family:"DM Mono",monospace;font-size:12px;letter-spacing:.13em;font-weight:500}
+.sound-btn{border:1px solid var(--green);border-radius:99px;background:transparent;color:var(--green);padding:8px 14px;font-size:12px}
+.sound-btn:hover{background:var(--green);color:var(--paper)}
+main{max-width:1180px;margin:auto;padding:24px 5vw 70px}
+.intro{text-align:center;margin:12px auto 28px}
+.kicker{font-family:"DM Mono",monospace;color:var(--orange);font-size:11px;letter-spacing:.22em}
+h1{font-size:clamp(32px,5vw,58px);letter-spacing:.08em;margin:9px 0 7px;font-weight:800}
+.subtitle{font-size:14px;color:var(--muted);letter-spacing:.06em;margin:0}
+.stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,430px);gap:clamp(26px,6vw,82px);align-items:center;max-width:940px;margin:0 auto}
+.story{padding:10px 0}
+.step-label{font:11px "DM Mono",monospace;color:var(--orange);letter-spacing:.16em;margin-bottom:13px}
+h2{font-size:23px;margin:0 0 10px;letter-spacing:.04em}
+.description{color:var(--muted);font-size:14px;line-height:1.9;margin:0 0 23px}
+.direction-list{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.direction{border:1px solid var(--line);background:rgba(255,248,233,.55);color:var(--ink);padding:13px 14px;text-align:left;min-height:74px;transition:.2s;position:relative}
+.direction:hover{transform:translateY(-2px);border-color:var(--orange)}
+.direction.selected{background:var(--green);border-color:var(--green);color:var(--paper)}
+.direction strong{display:block;font-size:14px;margin-bottom:4px}
+.direction small{font-size:11px;opacity:.75}
+.primary{background:var(--orange);color:#fff8e9;border:0;padding:13px 24px;font-weight:700;letter-spacing:.08em;box-shadow:4px 4px 0 #9e432f;transition:.15s}
+.primary:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 #9e432f}
+.primary:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.action-row{display:flex;gap:12px;align-items:center;margin-top:22px;flex-wrap:wrap}
+.text-btn{border:0;background:none;color:var(--green);text-decoration:underline;text-underline-offset:4px;font-size:12px;padding:9px 2px}
+.machine-wrap{position:relative;max-width:390px;width:100%;margin:auto}
+.machine-caption{font:10px "DM Mono",monospace;letter-spacing:.17em;text-align:center;color:var(--muted);margin-top:12px}
+.machine{position:relative;background:var(--orange);border:4px solid var(--ink);border-radius:24px 24px 13px 13px;padding:16px 16px 20px;box-shadow:9px 10px 0 rgba(37,61,50,.16);overflow:hidden}
+.machine:before{content:"";position:absolute;top:0;left:0;right:0;height:10px;background:repeating-linear-gradient(90deg,var(--yellow) 0 18px,transparent 18px 27px)}
+.machine-top{display:flex;justify-content:space-between;align-items:center;color:#fff4dc;font:10px "DM Mono",monospace;letter-spacing:.13em;padding:3px 2px 13px}
+.machine-window{background:var(--green);border:3px solid var(--ink);border-radius:12px;padding:15px 13px 12px;position:relative}
+.window-title{text-align:center;color:#f5e8c9;font-size:12px;letter-spacing:.15em;margin-bottom:11px}
+.capsules{height:148px;display:flex;align-items:end;justify-content:center;gap:7px;padding:0 8px 6px;overflow:hidden}
+.capsule{width:43px;height:69px;border:2px solid var(--ink);border-radius:50% 50% 45% 45%;position:relative;box-shadow:inset 0 -7px rgba(0,0,0,.08)}
+.capsule:before{content:"";position:absolute;left:-1px;right:-1px;top:48%;height:3px;background:var(--ink)}
+.capsule:nth-child(1){background:#edc56c;transform:rotate(-12deg);height:62px}
+.capsule:nth-child(2){background:#e67b5b;height:82px}
+.capsule:nth-child(3){background:#e9dfbd;transform:rotate(8deg);height:72px}
+.capsule:nth-child(4){background:#7c9b75;height:57px;transform:rotate(-5deg)}
+.capsule:nth-child(5){background:#d9a2a0;height:76px;transform:rotate(12deg)}
+.machine-window.spinning .capsules{animation:shake .13s linear infinite}
+@keyframes shake{0%{transform:translateX(-3px) rotate(-1deg)}50%{transform:translateX(3px) rotate(1deg)}100%{transform:translateX(-3px) rotate(-1deg)}}
+.machine-controls{display:grid;grid-template-columns:1fr 70px;gap:13px;align-items:center;margin-top:15px}
+.coin-slot{height:40px;border:2px solid var(--ink);background:#f4d99b;border-radius:5px;display:flex;align-items:center;justify-content:center;color:var(--ink);font:10px "DM Mono",monospace;letter-spacing:.1em}
+.lever-area{height:73px;position:relative;display:flex;justify-content:center}
+.lever-base{position:absolute;bottom:0;width:56px;height:25px;background:var(--yellow);border:2px solid var(--ink);border-radius:7px}
+.lever{position:absolute;bottom:17px;width:9px;height:48px;background:#e8d7b5;border:2px solid var(--ink);border-radius:8px;transform:rotate(18deg);transform-origin:bottom;transition:.25s}
+.lever:after{content:"";position:absolute;top:-12px;left:-8px;width:22px;height:22px;border-radius:50%;background:var(--yellow);border:2px solid var(--ink)}
+.lever.pulled{transform:rotate(65deg)}
+.dispense{height:32px;background:var(--ink);border:2px solid #172a22;border-radius:3px;margin:12px 9px 0;display:flex;align-items:center;justify-content:center;color:#a6b49a;font:9px "DM Mono",monospace;letter-spacing:.2em}
+.machine-foot{height:13px;background:var(--ink);margin:0 23px;border-radius:0 0 5px 5px}
+.ticket-area{max-width:720px;margin:34px auto 0;display:none}
+.ticket-area.show{display:block;animation:ticketIn .65s cubic-bezier(.2,.8,.2,1) both}
+@keyframes ticketIn{from{opacity:0;transform:translateY(25px) rotate(-2deg)}to{opacity:1;transform:translateY(0) rotate(0)}}
+.ticket{background:var(--paper);border:1px solid var(--line);padding:25px 28px;position:relative;box-shadow:5px 6px 0 rgba(37,61,50,.12);display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center}
+.ticket:before,.ticket:after{content:"";position:absolute;top:50%;width:18px;height:18px;border-radius:50%;background:var(--cream);border:1px solid var(--line);transform:translateY(-50%)}
+.ticket:before{left:-10px}.ticket:after{right:-10px}
+.ticket-overline{font:10px "DM Mono",monospace;color:var(--orange);letter-spacing:.18em}
+.ticket h3{font-size:clamp(23px,4vw,34px);margin:8px 0;color:var(--green)}
+.ticket p{font-size:13px;line-height:1.8;color:#696858;margin:0;max-width:490px}
+.ticket-stamp{width:78px;height:78px;border:2px solid var(--orange);border-radius:50%;display:grid;place-items:center;color:var(--orange);font:10px "DM Mono",monospace;text-align:center;transform:rotate(10deg);padding:8px}
+.ticket-meta{font:10px "DM Mono",monospace;color:var(--muted);margin-top:17px;letter-spacing:.08em}
+.ticket-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:17px}
+.secondary{background:transparent;border:1px solid var(--green);color:var(--green);padding:10px 17px;font-size:12px}
+.secondary:hover{background:var(--green);color:var(--paper)}
+.status{min-height:22px;font-size:12px;color:var(--orange);margin-top:12px}
+.bottom-nav{display:flex;justify-content:center;gap:25px;margin-top:45px;border-top:1px solid var(--line);padding-top:19px}
+.bottom-nav button{background:none;border:0;color:var(--green);font-size:12px;text-decoration:underline;text-underline-offset:4px}
+.collection{max-width:850px;margin:28px auto 0;display:none}
+.collection.show{display:block}
+.collection-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}
+.collection-head h2{font-size:17px;margin:0}
+.collection-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.saved-item{border-left:4px solid var(--orange);padding:12px 14px;background:rgba(255,248,233,.6)}
+.saved-item strong{display:block;font-size:14px}.saved-item small{display:block;color:var(--muted);margin-top:5px;font-size:10px}
+.empty{font-size:13px;color:var(--muted);padding:18px 0}
+.footer{text-align:center;color:var(--muted);font:10px "DM Mono",monospace;letter-spacing:.1em;margin-top:48px}
+.hidden{display:none!important}
+@media(max-width:760px){
+  main{padding-top:12px}.stage{grid-template-columns:1fr;gap:25px}.story{max-width:520px;margin:auto;width:100%}
+  .machine-wrap{max-width:340px;grid-row:1}.machine{padding:14px}.machine-window{padding:12px}
+  .capsules{height:126px}.capsule{transform:scale(.9)}
+  .intro{margin-bottom:22px}.ticket{padding:21px 20px;grid-template-columns:1fr}.ticket-stamp{position:absolute;right:22px;top:20px;width:58px;height:58px;font-size:8px}
+  .ticket h3{padding-right:55px}.bottom-nav{margin-top:32px}
+}
+@media(max-width:390px){.direction-list{grid-template-columns:1fr 1fr}.direction{padding:11px 10px}.direction strong{font-size:13px}.machine-wrap{max-width:300px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">PLVM / NO. 001</div>
+  <button class="sound-btn" id="soundToggle" aria-pressed="true">♫ 音效 ON</button>
+</header>
+<main>
+  <section class="intro">
+    <div class="kicker">A LITTLE CHANGE, A DIFFERENT LIFE.</div>
+    <h1>平行人生販賣機</h1>
+    <p class="subtitle">如果當初選了另一條路，你會成為誰？</p>
+  </section>
+
+  <section class="stage" id="stage">
+    <div class="story">
+      <div class="step-label" id="stepLabel">STEP 01 / CHOOSE</div>
+      <h2 id="sectionTitle">選一個你想走的方向</h2>
+      <p class="description" id="sectionDesc">投下一點好奇心，看看另一個版本的你，正在過著什麼樣的生活。</p>
+      <div class="direction-list" id="directionList">
+        <button class="direction" data-direction="冒險"><strong>✳ 冒險</strong><small>去沒去過的地方</small></button>
+        <button class="direction" data-direction="創作"><strong>✎ 創作</strong><small>把想法變成作品</small></button>
+        <button class="direction" data-direction="日常"><strong>☼ 日常</strong><small>過簡單舒服的生活</small></button>
+        <button class="direction" data-direction="未知"><strong>？未知</strong><small>交給命運決定</small></button>
+      </div>
+      <div class="action-row">
+        <button class="primary" id="startBtn" disabled>投入硬幣，開始抽取 ↗</button>
+        <button class="text-btn" id="randomBtn">今天不想選，幫我決定</button>
+      </div>
+      <div class="status" id="status" aria-live="polite">請先選擇一個人生方向。</div>
+    </div>
+
+    <div class="machine-wrap" aria-label="復古販賣機插畫">
+      <div class="machine" id="machine">
+        <div class="machine-top"><span>PARALLEL LIFE</span><span>¥ 100</span></div>
+        <div class="machine-window" id="machineWindow">
+          <div class="window-title">— YOUR OTHER POSSIBILITY —</div>
+          <div class="capsules" aria-hidden="true">
+            <i class="capsule"></i><i class="capsule"></i><i class="capsule"></i><i class="capsule"></i><i class="capsule"></i>
+          </div>
+        </div>
+        <div class="machine-controls">
+          <div class="coin-slot" id="coinSlot">INSERT COIN</div>
+          <div class="lever-area"><div class="lever" id="lever"></div><div class="lever-base"></div></div>
+        </div>
+        <div class="dispense" id="dispense">WAITING FOR YOU</div>
+      </div>
+      <div class="machine-foot"></div>
+      <div class="machine-caption">ONE COIN · ONE POSSIBILITY · INFINITE STORIES</div>
+    </div>
+  </section>
+
+  <section class="ticket-area" id="ticketArea" aria-live="polite">
+    <div class="ticket">
+      <div>
+        <div class="ticket-overline">YOUR PARALLEL LIFE / TICKET No. <span id="ticketNo">001</span></div>
+        <h3 id="resultTitle">另一個版本的你</h3>
+        <p id="resultText"></p>
+        <div class="ticket-meta" id="resultMeta"></div>
+      </div>
+      <div class="ticket-stamp">ANOTHER<br>YOU<br>✳</div>
+    </div>
+    <div class="ticket-actions">
+      <button class="primary" id="saveBtn">＋ 收藏這張票券</button>
+      <button class="secondary" id="againBtn">再抽一次</button>
+      <button class="text-btn" id="backBtn">重新選擇方向</button>
+    </div>
+  </section>
+
+  <section class="collection" id="collection">
+    <div class="collection-head"><h2>✳ 我的平行人生收藏</h2><button class="text-btn" id="clearCollection">清空收藏</button></div>
+    <div class="collection-list" id="collectionList"></div>
+  </section>
+
+  <nav class="bottom-nav">
+    <button id="collectionToggle">查看我的收藏</button>
+    <button id="resetBtn">重新開始</button>
+  </nav>
+  <div class="footer">MADE OF CHOICES & WHAT-IFS · TAKE A CHANCE</div>
+</main>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const directions = ["冒險","創作","日常","未知"];
+  const stories = {
+    "冒險":[
+      ["沿海公路的旅行家","你在一座靠海的小鎮醒來，白天替旅人規劃路線，傍晚就騎著腳踏車去看夕陽。行李不多，故事很多。"],
+      ["山裡的咖啡店老闆","你離開熟悉的城市，在山腰開了一間小店。每天認識不同的人，也慢慢學會和自己相處。"],
+      ["四處採集靈感的人","你沒有固定的辦公室，生活像一張持續更新的地圖。每一次迷路，都意外帶你找到新的方向。"],
+      ["島嶼觀察員","你住在一座不太起眼的小島，記錄潮汐、植物和居民的故事。你發現世界比想像中更寬廣。"]
+    ],
+    "創作":[
+      ["獨立插畫工作者","你把腦袋裡的小宇宙畫成一張張圖。案子有時很趕，但每次看到作品被貼在陌生人的牆上，都覺得值得。"],
+      ["老屋改造設計師","你專門替舊空間找新生命，保留磨損的痕跡，也加入自己的想像。你相信不完美也是一種美。"],
+      ["深夜電台節目企劃","你用聲音收集城市裡的小故事。深夜收到聽眾的來信時，你知道自己的創作正悄悄陪伴某個人。"],
+      ["自己的工作室主人","你在一間灑滿陽光的小工作室工作，桌上永遠有沒完成的草稿。你不急著成為誰，只想做出喜歡的東西。"]
+    ],
+    "日常":[
+      ["巷口花店店員","你每天整理花束、記住熟客喜歡的顏色。生活沒有太多大事件，但你很擅長把平凡日子過得可愛。"],
+      ["小鎮圖書館員","你在安靜的書架間工作，偶爾替讀者找到一本剛好需要的書。你的生活緩慢，卻一點也不空白。"],
+      ["早餐店的神祕主廚","你研發出一份只有熟客知道的隱藏菜單。每天清晨很忙，但看見大家吃得滿足，就是你的成就感。"],
+      ["植物研究室助手","你照顧一整排植物，觀察它們細微的變化。你終於發現，有些成長真的急不來。"]
+    ],
+    "未知":[
+      ["城市裡的尋寶人","你開始收集城市裡被忽略的小東西：一張舊票根、一句塗鴉、一扇奇怪的窗。某天，它們拼成了新的故事。"],
+      ["意外走紅的神祕人物","你只是做了平常會做的事，卻意外被很多人看見。你一邊困惑，一邊發現原來自己的小堅持很有魅力。"],
+      ["流動的生活實驗家","你每個月替自己設定一個新挑戰。生活沒有標準答案，而你最喜歡的，就是還不知道下一站在哪裡。"],
+      ["平行世界的郵差","你負責把信送到不同版本的自己手上。每封信都提醒你：沒走過的路，也不代表不值得期待。"]
+    ]
+  };
+  let selected = "";
+  let current = null;
+  let busy = false;
+  let soundOn = true;
+  let audioCtx = null;
+  let saved = [];
+  try { saved = JSON.parse(localStorage.getItem("plvm_saved") || "[]"); } catch(e) { saved = []; }
+
+  function beep(freq=440, duration=.09, type="sine", volume=.045) {
+    if (!soundOn) return;
+    try {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+      osc.type = type; osc.frequency.value = freq;
+      gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(.001, audioCtx.currentTime + duration);
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.start(); osc.stop(audioCtx.currentTime + duration);
+    } catch(e) {}
+  }
+  function setStatus(message){ $("status").textContent = message; }
+  function choose(direction) {
+    if (busy) return;
+    selected = direction;
+    document.querySelectorAll(".direction").forEach(btn => btn.classList.toggle("selected", btn.dataset.direction === direction));
+    $("startBtn").disabled = false;
+    setStatus("已選擇「" + direction + "」——準備好看看另一種可能了嗎？");
+    beep(520,.07);
+  }
+  document.querySelectorAll(".direction").forEach(btn => btn.addEventListener("click", () => choose(btn.dataset.direction)));
+  $("randomBtn").addEventListener("click", () => {
+    choose(directions[Math.floor(Math.random()*directions.length)]);
+    setStatus("命運替你選了「" + selected + "」！可以開始抽取了。");
+  });
+
+  function draw() {
+    if (busy) return;
+    if (!selected) { setStatus("先選一個人生方向，或讓我幫你決定吧！"); return; }
+    busy = true;
+    $("startBtn").disabled = true;
+    $("randomBtn").disabled = true;
+    $("coinSlot").textContent = "COIN ACCEPTED";
+    $("dispense").textContent = "PROCESSING...";
+    $("machineWindow").classList.add("spinning");
+    $("lever").classList.add("pulled");
+    $("ticketArea").classList.remove("show");
+    setStatus("販賣機正在讀取你的另一種可能……");
+    beep(220,.12,"square",.025);
+    setTimeout(() => beep(330,.12,"square",.025),180);
+    setTimeout(() => beep(440,.18,"triangle",.04),360);
+    setTimeout(() => {
+      const pool = stories[selected];
+      const item = pool[Math.floor(Math.random()*pool.length)];
+      current = {direction:selected,title:item[0],text:item[1],id:Date.now()};
+      $("resultTitle").textContent = current.title;
+      $("resultText").textContent = current.text;
+      $("resultMeta").textContent = "人生方向：" + selected + "　／　" + new Date().toLocaleDateString("zh-TW");
+      $("ticketNo").textContent = String(Math.floor(Math.random()*899)+100);
+      $("machineWindow").classList.remove("spinning");
+      $("lever").classList.remove("pulled");
+      $("dispense").textContent = "TICKET DISPENSED ✳";
+      $("ticketArea").classList.add("show");
+      setStatus("抽取完成！這是你在另一個世界的生活。");
+      $("saveBtn").textContent = "＋ 收藏這張票券";
+      $("saveBtn").disabled = false;
+      beep(660,.12,"sine",.05); setTimeout(()=>beep(880,.2,"sine",.04),110);
+      busy = false;
+      $("randomBtn").disabled = false;
+      $("ticketArea").scrollIntoView({behavior:"smooth",block:"nearest"});
+    },1050);
+  }
+  $("startBtn").addEventListener("click", draw);
+  $("againBtn").addEventListener("click", draw);
+  $("backBtn").addEventListener("click", resetChoice);
+  function resetChoice() {
+    if (busy) return;
+    $("ticketArea").classList.remove("show");
+    $("stepLabel").textContent = "STEP 01 / CHOOSE";
+    $("sectionTitle").textContent = "選一個你想走的方向";
+    $("sectionDesc").textContent = "投下一點好奇心，看看另一個版本的你，正在過著什麼樣的生活。";
+    $("directionList").classList.remove("hidden");
+    $("startBtn").classList.remove("hidden");
+    $("randomBtn").classList.remove("hidden");
+    selected = "";
+    document.querySelectorAll(".direction").forEach(btn=>btn.classList.remove("selected"));
+    $("startBtn").disabled = true;
+    $("coinSlot").textContent = "INSERT COIN";
+    $("dispense").textContent = "WAITING FOR YOU";
+    setStatus("請先選擇一個人生方向。");
+  }
+  $("resetBtn").addEventListener("click", () => {
+    resetChoice();
+    $("collection").classList.remove("show");
+    $("collectionToggle").textContent = "查看我的收藏";
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+  $("saveBtn").addEventListener("click", () => {
+    if (!current) return;
+    if (saved.some(item => item.id === current.id)) { setStatus("這張票券已經收藏過囉！"); return; }
+    saved.unshift(current);
+    try { localStorage.setItem("plvm_saved",JSON.stringify(saved)); } catch(e) {}
+    $("saveBtn").textContent = "✓ 已收藏";
+    $("saveBtn").disabled = true;
+    setStatus("收藏成功！你可以在下方的收藏清單再次查看。");
+    renderCollection(); beep(740,.1);
+  });
+  function renderCollection() {
+    const list = $("collectionList");
+    list.innerHTML = "";
+    if (!saved.length) { list.innerHTML = '<div class="empty">還沒有收藏的平行人生。抽到喜歡的結果，就把它留下來吧。</div>'; return; }
+    saved.forEach(item => {
+      const article = document.createElement("article");
+      article.className = "saved-item";
+      const title = document.createElement("strong"); title.textContent = item.title;
+      const detail = document.createElement("small"); detail.textContent = item.direction + " · " + item.text;
+      article.append(title,detail); list.append(article);
+    });
+  }
+  $("collectionToggle").addEventListener("click", () => {
+    const visible = $("collection").classList.toggle("show");
+    $("collectionToggle").textContent = visible ? "收起收藏" : "查看我的收藏";
+    renderCollection();
+    if (visible) $("collection").scrollIntoView({behavior:"smooth",block:"nearest"});
+  });
+  $("clearCollection").addEventListener("click", () => {
+    if (!saved.length) { setStatus("收藏清單目前是空的。"); return; }
+    if (!confirm("確定要清空所有收藏的票券嗎？")) return;
+    saved = [];
+    try { localStorage.removeItem("plvm_saved"); } catch(e) {}
+    renderCollection(); setStatus("收藏已清空。");
+  });
+  $("soundToggle").addEventListener("click", () => {
+    soundOn = !soundOn;
+    $("soundToggle").textContent = soundOn ? "♫ 音效 ON" : "♫ 音效 OFF";
+    $("soundToggle").setAttribute("aria-pressed",String(soundOn));
+    if (soundOn) beep(600,.1);
+  });
+  renderCollection();
+})();
+</script>
+</body>
+</html>
