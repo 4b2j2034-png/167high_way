@@ -1,359 +1,312 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f4ead6">
-<title>平行人生販賣機｜Parallel Life Vending Machine</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="沿著台南 167 公路，探索 308 高地、草山月世界與 308 老農夫周邊的自然地景與地方生活。">
+<title>167 公路 × 308 老農夫｜沿路慢慢看</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
 :root{
-  --cream:#f4ead6;--paper:#fff8e9;--ink:#253d32;--green:#315846;
-  --green2:#55745b;--orange:#d85b3d;--yellow:#e9b85f;--line:#c9b99b;
-  --muted:#827b68;--shadow:rgba(49,61,48,.14);
+  --cream:#f8f5e9;--paper:#fffdf6;--blue:#8299bd;--blue-deep:#526d96;
+  --yellow:#f5cf62;--green:#91ad78;--brown:#b98d70;--ink:#344238;
+  --muted:#6f796f;--line:#e7e1d1;--shadow:0 16px 40px rgba(65,75,59,.10);
 }
-*{box-sizing:border-box}
-body{margin:0;background:var(--cream);color:var(--ink);font-family:"Noto Sans TC",sans-serif;min-height:100vh;overflow-x:hidden}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;z-index:-1;background-image:radial-gradient(#806f51 .65px,transparent .65px);background-size:7px 7px}
-button{font:inherit;cursor:pointer}
-button:focus-visible{outline:3px solid var(--orange);outline-offset:4px}
-.topbar{max-width:1180px;margin:auto;padding:24px 5vw 10px;display:flex;justify-content:space-between;align-items:center}
-.brand{font-family:"DM Mono",monospace;font-size:12px;letter-spacing:.13em;font-weight:500}
-.sound-btn{border:1px solid var(--green);border-radius:99px;background:transparent;color:var(--green);padding:8px 14px;font-size:12px}
-.sound-btn:hover{background:var(--green);color:var(--paper)}
-main{max-width:1180px;margin:auto;padding:24px 5vw 70px}
-.intro{text-align:center;margin:12px auto 28px}
-.kicker{font-family:"DM Mono",monospace;color:var(--orange);font-size:11px;letter-spacing:.22em}
-h1{font-size:clamp(32px,5vw,58px);letter-spacing:.08em;margin:9px 0 7px;font-weight:800}
-.subtitle{font-size:14px;color:var(--muted);letter-spacing:.06em;margin:0}
-.stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,430px);gap:clamp(26px,6vw,82px);align-items:center;max-width:940px;margin:0 auto}
-.story{padding:10px 0}
-.step-label{font:11px "DM Mono",monospace;color:var(--orange);letter-spacing:.16em;margin-bottom:13px}
-h2{font-size:23px;margin:0 0 10px;letter-spacing:.04em}
-.description{color:var(--muted);font-size:14px;line-height:1.9;margin:0 0 23px}
-.direction-list{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.direction{border:1px solid var(--line);background:rgba(255,248,233,.55);color:var(--ink);padding:13px 14px;text-align:left;min-height:74px;transition:.2s;position:relative}
-.direction:hover{transform:translateY(-2px);border-color:var(--orange)}
-.direction.selected{background:var(--green);border-color:var(--green);color:var(--paper)}
-.direction strong{display:block;font-size:14px;margin-bottom:4px}
-.direction small{font-size:11px;opacity:.75}
-.primary{background:var(--orange);color:#fff8e9;border:0;padding:13px 24px;font-weight:700;letter-spacing:.08em;box-shadow:4px 4px 0 #9e432f;transition:.15s}
-.primary:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 #9e432f}
-.primary:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
-.action-row{display:flex;gap:12px;align-items:center;margin-top:22px;flex-wrap:wrap}
-.text-btn{border:0;background:none;color:var(--green);text-decoration:underline;text-underline-offset:4px;font-size:12px;padding:9px 2px}
-.machine-wrap{position:relative;max-width:390px;width:100%;margin:auto}
-.machine-caption{font:10px "DM Mono",monospace;letter-spacing:.17em;text-align:center;color:var(--muted);margin-top:12px}
-.machine{position:relative;background:var(--orange);border:4px solid var(--ink);border-radius:24px 24px 13px 13px;padding:16px 16px 20px;box-shadow:9px 10px 0 rgba(37,61,50,.16);overflow:hidden}
-.machine:before{content:"";position:absolute;top:0;left:0;right:0;height:10px;background:repeating-linear-gradient(90deg,var(--yellow) 0 18px,transparent 18px 27px)}
-.machine-top{display:flex;justify-content:space-between;align-items:center;color:#fff4dc;font:10px "DM Mono",monospace;letter-spacing:.13em;padding:3px 2px 13px}
-.machine-window{background:var(--green);border:3px solid var(--ink);border-radius:12px;padding:15px 13px 12px;position:relative}
-.window-title{text-align:center;color:#f5e8c9;font-size:12px;letter-spacing:.15em;margin-bottom:11px}
-.capsules{height:148px;display:flex;align-items:end;justify-content:center;gap:7px;padding:0 8px 6px;overflow:hidden}
-.capsule{width:43px;height:69px;border:2px solid var(--ink);border-radius:50% 50% 45% 45%;position:relative;box-shadow:inset 0 -7px rgba(0,0,0,.08)}
-.capsule:before{content:"";position:absolute;left:-1px;right:-1px;top:48%;height:3px;background:var(--ink)}
-.capsule:nth-child(1){background:#edc56c;transform:rotate(-12deg);height:62px}
-.capsule:nth-child(2){background:#e67b5b;height:82px}
-.capsule:nth-child(3){background:#e9dfbd;transform:rotate(8deg);height:72px}
-.capsule:nth-child(4){background:#7c9b75;height:57px;transform:rotate(-5deg)}
-.capsule:nth-child(5){background:#d9a2a0;height:76px;transform:rotate(12deg)}
-.machine-window.spinning .capsules{animation:shake .13s linear infinite}
-@keyframes shake{0%{transform:translateX(-3px) rotate(-1deg)}50%{transform:translateX(3px) rotate(1deg)}100%{transform:translateX(-3px) rotate(-1deg)}}
-.machine-controls{display:grid;grid-template-columns:1fr 70px;gap:13px;align-items:center;margin-top:15px}
-.coin-slot{height:40px;border:2px solid var(--ink);background:#f4d99b;border-radius:5px;display:flex;align-items:center;justify-content:center;color:var(--ink);font:10px "DM Mono",monospace;letter-spacing:.1em}
-.lever-area{height:73px;position:relative;display:flex;justify-content:center}
-.lever-base{position:absolute;bottom:0;width:56px;height:25px;background:var(--yellow);border:2px solid var(--ink);border-radius:7px}
-.lever{position:absolute;bottom:17px;width:9px;height:48px;background:#e8d7b5;border:2px solid var(--ink);border-radius:8px;transform:rotate(18deg);transform-origin:bottom;transition:.25s}
-.lever:after{content:"";position:absolute;top:-12px;left:-8px;width:22px;height:22px;border-radius:50%;background:var(--yellow);border:2px solid var(--ink)}
-.lever.pulled{transform:rotate(65deg)}
-.dispense{height:32px;background:var(--ink);border:2px solid #172a22;border-radius:3px;margin:12px 9px 0;display:flex;align-items:center;justify-content:center;color:#a6b49a;font:9px "DM Mono",monospace;letter-spacing:.2em}
-.machine-foot{height:13px;background:var(--ink);margin:0 23px;border-radius:0 0 5px 5px}
-.ticket-area{max-width:720px;margin:34px auto 0;display:none}
-.ticket-area.show{display:block;animation:ticketIn .65s cubic-bezier(.2,.8,.2,1) both}
-@keyframes ticketIn{from{opacity:0;transform:translateY(25px) rotate(-2deg)}to{opacity:1;transform:translateY(0) rotate(0)}}
-.ticket{background:var(--paper);border:1px solid var(--line);padding:25px 28px;position:relative;box-shadow:5px 6px 0 rgba(37,61,50,.12);display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center}
-.ticket:before,.ticket:after{content:"";position:absolute;top:50%;width:18px;height:18px;border-radius:50%;background:var(--cream);border:1px solid var(--line);transform:translateY(-50%)}
-.ticket:before{left:-10px}.ticket:after{right:-10px}
-.ticket-overline{font:10px "DM Mono",monospace;color:var(--orange);letter-spacing:.18em}
-.ticket h3{font-size:clamp(23px,4vw,34px);margin:8px 0;color:var(--green)}
-.ticket p{font-size:13px;line-height:1.8;color:#696858;margin:0;max-width:490px}
-.ticket-stamp{width:78px;height:78px;border:2px solid var(--orange);border-radius:50%;display:grid;place-items:center;color:var(--orange);font:10px "DM Mono",monospace;text-align:center;transform:rotate(10deg);padding:8px}
-.ticket-meta{font:10px "DM Mono",monospace;color:var(--muted);margin-top:17px;letter-spacing:.08em}
-.ticket-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:17px}
-.secondary{background:transparent;border:1px solid var(--green);color:var(--green);padding:10px 17px;font-size:12px}
-.secondary:hover{background:var(--green);color:var(--paper)}
-.status{min-height:22px;font-size:12px;color:var(--orange);margin-top:12px}
-.bottom-nav{display:flex;justify-content:center;gap:25px;margin-top:45px;border-top:1px solid var(--line);padding-top:19px}
-.bottom-nav button{background:none;border:0;color:var(--green);font-size:12px;text-decoration:underline;text-underline-offset:4px}
-.collection{max-width:850px;margin:28px auto 0;display:none}
-.collection.show{display:block}
-.collection-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}
-.collection-head h2{font-size:17px;margin:0}
-.collection-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
-.saved-item{border-left:4px solid var(--orange);padding:12px 14px;background:rgba(255,248,233,.6)}
-.saved-item strong{display:block;font-size:14px}.saved-item small{display:block;color:var(--muted);margin-top:5px;font-size:10px}
-.empty{font-size:13px;color:var(--muted);padding:18px 0}
-.footer{text-align:center;color:var(--muted);font:10px "DM Mono",monospace;letter-spacing:.1em;margin-top:48px}
-.hidden{display:none!important}
-@media(max-width:760px){
-  main{padding-top:12px}.stage{grid-template-columns:1fr;gap:25px}.story{max-width:520px;margin:auto;width:100%}
-  .machine-wrap{max-width:340px;grid-row:1}.machine{padding:14px}.machine-window{padding:12px}
-  .capsules{height:126px}.capsule{transform:scale(.9)}
-  .intro{margin-bottom:22px}.ticket{padding:21px 20px;grid-template-columns:1fr}.ticket-stamp{position:absolute;right:22px;top:20px;width:58px;height:58px;font-size:8px}
-  .ticket h3{padding-right:55px}.bottom-nav{margin-top:32px}
+*{box-sizing:border-box} html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,"Noto Sans TC","Microsoft JhengHei",sans-serif;line-height:1.75}
+button,a{font:inherit} a{color:inherit;text-decoration:none} button{cursor:pointer}
+.wrap{width:min(1160px,calc(100% - 44px));margin:auto}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(248,245,233,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(80,90,70,.12)}
+.nav{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:850;letter-spacing:.04em}
+.brand img{width:58px;height:58px;object-fit:contain}
+.navlinks{display:flex;align-items:center;gap:24px;font-size:.92rem;color:#59685c}
+.navlinks a:hover{color:var(--blue-deep)}
+.nav-cta,.btn{border:0;border-radius:999px;padding:11px 20px;background:var(--blue-deep);color:white;font-weight:750;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.2s}
+.nav-cta:hover,.btn:hover{transform:translateY(-2px);filter:brightness(1.06)}
+.menu-btn{display:none;border:1px solid var(--line);background:var(--paper);border-radius:50%;width:42px;height:42px}
+.hero{padding:48px 0 76px;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:.92fr 1.08fr;gap:42px;align-items:center}
+.kicker{display:inline-flex;align-items:center;gap:9px;color:var(--blue-deep);font-weight:800;letter-spacing:.14em;font-size:.78rem}
+.kicker:before{content:"";width:28px;height:2px;background:var(--yellow)}
+h1,h2,h3,p{margin-top:0} h1{font-size:clamp(2.5rem,5.3vw,5.2rem);line-height:1.13;letter-spacing:-.055em;margin:18px 0}
+h1 span{color:var(--blue-deep);display:block}
+.hero-copy{font-size:1.05rem;color:#657267;max-width:490px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin:26px 0}
+.btn.secondary{background:transparent;color:var(--blue-deep);border:1px solid var(--blue-deep)}
+.hero-note{font-size:.82rem;color:var(--muted)}
+.hero-photo{position:relative}
+.hero-photo img{width:100%;height:470px;object-fit:cover;border-radius:48% 48% 18px 18px;box-shadow:var(--shadow);display:block}
+.photo-tag{position:absolute;left:-22px;bottom:25px;background:var(--yellow);padding:13px 18px;border-radius:18px 18px 18px 4px;font-weight:800;transform:rotate(-3deg)}
+.photo-caption{font-size:.75rem;color:var(--muted);text-align:right;margin-top:10px}
+.section{padding:76px 0}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:30px;margin-bottom:32px}
+.section-head h2{font-size:clamp(2rem,4vw,3.3rem);line-height:1.2;margin:10px 0 0;letter-spacing:-.04em}
+.section-head p{max-width:480px;color:var(--muted);margin:0}
+.intro-band{background:var(--blue-deep);color:#fff;padding:38px 0}
+.intro-band .band-grid{display:grid;grid-template-columns:1fr 2fr;gap:40px;align-items:center}
+.band-grid strong{font-size:1.45rem}.band-grid p{margin:0;color:#e5eaf1}
+.themes{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.theme{border:1px solid var(--line);border-radius:22px;padding:20px;background:var(--paper);text-align:left;min-height:154px;transition:.2s;color:var(--ink)}
+.theme:hover,.theme.active{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--blue)}
+.theme .emoji{font-size:1.8rem;display:block;margin-bottom:10px}.theme b{display:block;font-size:1.08rem}.theme small{color:var(--muted)}
+.filter-row{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:34px 0 18px;flex-wrap:wrap}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:transparent;border-radius:99px;padding:7px 15px;color:#637064}
+.chip.active{background:var(--ink);color:white;border-color:var(--ink)}
+.count{font-size:.85rem;color:var(--muted)}
+.spot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.spot{background:var(--paper);border-radius:22px;overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column;transition:.2s}
+.spot:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.spot-art{height:170px;display:grid;place-items:center;font-size:3.5rem;position:relative;background:linear-gradient(140deg,#e8eddf,#dce5d6)}
+.spot-art.blue{background:linear-gradient(140deg,#e4eaf1,#cbd8e8)}.spot-art.gold{background:linear-gradient(140deg,#f8edc9,#f3d987)}.spot-art.brown{background:linear-gradient(140deg,#eee0d2,#d8b79d)}
+.spot-art small{position:absolute;left:15px;top:13px;background:rgba(255,253,246,.88);border-radius:99px;padding:4px 10px;font-size:.72rem;color:var(--ink)}
+.spot-body{padding:20px;display:flex;flex-direction:column;flex:1}
+.spot-body h3{font-size:1.2rem;margin:0 0 6px}.spot-body p{font-size:.9rem;color:var(--muted);margin:0 0 16px}
+.spot-actions{display:flex;gap:8px;margin-top:auto}
+.mini-btn{border:1px solid var(--line);border-radius:99px;background:transparent;padding:8px 13px;font-size:.83rem;color:var(--ink)}
+.mini-btn.save{background:#eef2e8;border-color:#dbe5d0}.mini-btn.saved{background:var(--yellow);border-color:var(--yellow)}
+.status{font-size:.72rem;color:#856d4c;margin-top:12px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:46px;align-items:center}
+.split-visual{min-height:360px;border-radius:48% 48% 22px 22px;background:linear-gradient(145deg,#dce8d5,#a8bd91);display:grid;place-items:center;font-size:6rem;position:relative;overflow:hidden}
+.split-visual:after{content:"";position:absolute;width:80%;height:35%;bottom:-8%;border-radius:50%;background:#8ba476;transform:rotate(-8deg)}
+.split-visual span{z-index:1}
+.story-copy h2{font-size:clamp(2rem,4vw,3.2rem);line-height:1.2;letter-spacing:-.04em}
+.story-copy p{color:var(--muted)}
+.note-box{background:#f0ead9;border-left:4px solid var(--yellow);padding:15px 18px;border-radius:0 14px 14px 0;font-size:.88rem;color:#665e4d}
+.planner{background:#e9eee4;border-radius:30px;padding:34px;display:grid;grid-template-columns:1fr .8fr;gap:35px}
+.planner h2{font-size:2rem;margin-bottom:8px}.planner p{color:var(--muted)}
+.list-items{display:grid;gap:9px;margin-top:18px}
+.list-item{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--paper);border-radius:13px;padding:10px 14px}
+.list-item button{border:0;background:transparent;color:#8b6550;font-size:.85rem}
+.empty{padding:24px;border:1px dashed #b7c2ac;border-radius:16px;color:var(--muted);text-align:center}
+.planner-side{background:var(--paper);border-radius:22px;padding:24px}
+.planner-side h3{margin-bottom:8px}.planner-side ul{padding-left:19px;color:var(--muted);font-size:.9rem}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.info{padding:22px;border-top:3px solid var(--green);background:rgba(255,253,246,.72);border-radius:4px 4px 18px 18px}
+.info h3{margin-bottom:7px}.info p{font-size:.9rem;color:var(--muted);margin:0}
+.footer{background:#3d5146;color:#f8f5e9;padding:42px 0}
+.footer-inner{display:flex;justify-content:space-between;gap:25px;align-items:center}
+.footer p{margin:0;color:#d5dfd5;font-size:.85rem}
+.modal{position:fixed;inset:0;background:rgba(28,39,32,.62);z-index:50;display:none;place-items:center;padding:20px}
+.modal.open{display:grid}.modal-panel{background:var(--paper);border-radius:24px;width:min(620px,100%);max-height:88vh;overflow:auto;padding:30px;position:relative}
+.modal-close{position:absolute;right:17px;top:15px;border:0;background:#edf0e8;border-radius:50%;width:38px;height:38px;font-size:1.2rem}
+.modal-panel h2{padding-right:40px}.modal-panel p{color:var(--muted)}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#34483c;color:white;border-radius:99px;padding:10px 18px;z-index:70;transition:.25s;font-size:.88rem}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .65s,transform .65s}.reveal.visible{opacity:1;transform:none}
+@media(max-width:850px){
+ .navlinks{display:none;position:absolute;top:76px;left:0;right:0;background:var(--cream);padding:18px 24px 24px;flex-direction:column;align-items:flex-start;border-bottom:1px solid var(--line)}
+ .navlinks.open{display:flex}.menu-btn{display:block}.nav-cta{display:none}
+ .hero-grid,.split,.planner{grid-template-columns:1fr}.hero{padding-top:30px}.hero-photo img{height:360px}
+ .themes{grid-template-columns:repeat(2,1fr)}.spot-grid{grid-template-columns:repeat(2,1fr)}
+ .intro-band .band-grid{grid-template-columns:1fr;gap:10px}.section-head{display:block}.section-head p{margin-top:14px}
 }
-@media(max-width:390px){.direction-list{grid-template-columns:1fr 1fr}.direction{padding:11px 10px}.direction strong{font-size:13px}.machine-wrap{max-width:300px}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+@media(max-width:560px){
+ .wrap{width:min(100% - 30px,1160px)}.brand img{width:49px;height:49px}.brand{font-size:.9rem}
+ h1{font-size:2.75rem}.hero-photo img{height:290px}.photo-tag{left:-5px}
+ .section{padding:56px 0}.themes,.spot-grid,.info-grid{grid-template-columns:1fr}
+ .theme{min-height:unset}.spot-art{height:145px}.planner{padding:22px}.footer-inner{display:block}.footer p{margin-top:12px}
+}
 </style>
 </head>
 <body>
 <header class="topbar">
-  <div class="brand">PLVM / NO. 001</div>
-  <button class="sound-btn" id="soundToggle" aria-pressed="true">♫ 音效 ON</button>
-</header>
-<main>
-  <section class="intro">
-    <div class="kicker">A LITTLE CHANGE, A DIFFERENT LIFE.</div>
-    <h1>平行人生販賣機</h1>
-    <p class="subtitle">如果當初選了另一條路，你會成為誰？</p>
-  </section>
-
-  <section class="stage" id="stage">
-    <div class="story">
-      <div class="step-label" id="stepLabel">STEP 01 / CHOOSE</div>
-      <h2 id="sectionTitle">選一個你想走的方向</h2>
-      <p class="description" id="sectionDesc">投下一點好奇心，看看另一個版本的你，正在過著什麼樣的生活。</p>
-      <div class="direction-list" id="directionList">
-        <button class="direction" data-direction="冒險"><strong>✳ 冒險</strong><small>去沒去過的地方</small></button>
-        <button class="direction" data-direction="創作"><strong>✎ 創作</strong><small>把想法變成作品</small></button>
-        <button class="direction" data-direction="日常"><strong>☼ 日常</strong><small>過簡單舒服的生活</small></button>
-        <button class="direction" data-direction="未知"><strong>？未知</strong><small>交給命運決定</small></button>
-      </div>
-      <div class="action-row">
-        <button class="primary" id="startBtn" disabled>投入硬幣，開始抽取 ↗</button>
-        <button class="text-btn" id="randomBtn">今天不想選，幫我決定</button>
-      </div>
-      <div class="status" id="status" aria-live="polite">請先選擇一個人生方向。</div>
-    </div>
-
-    <div class="machine-wrap" aria-label="復古販賣機插畫">
-      <div class="machine" id="machine">
-        <div class="machine-top"><span>PARALLEL LIFE</span><span>¥ 100</span></div>
-        <div class="machine-window" id="machineWindow">
-          <div class="window-title">— YOUR OTHER POSSIBILITY —</div>
-          <div class="capsules" aria-hidden="true">
-            <i class="capsule"></i><i class="capsule"></i><i class="capsule"></i><i class="capsule"></i><i class="capsule"></i>
-          </div>
-        </div>
-        <div class="machine-controls">
-          <div class="coin-slot" id="coinSlot">INSERT COIN</div>
-          <div class="lever-area"><div class="lever" id="lever"></div><div class="lever-base"></div></div>
-        </div>
-        <div class="dispense" id="dispense">WAITING FOR YOU</div>
-      </div>
-      <div class="machine-foot"></div>
-      <div class="machine-caption">ONE COIN · ONE POSSIBILITY · INFINITE STORIES</div>
-    </div>
-  </section>
-
-  <section class="ticket-area" id="ticketArea" aria-live="polite">
-    <div class="ticket">
-      <div>
-        <div class="ticket-overline">YOUR PARALLEL LIFE / TICKET No. <span id="ticketNo">001</span></div>
-        <h3 id="resultTitle">另一個版本的你</h3>
-        <p id="resultText"></p>
-        <div class="ticket-meta" id="resultMeta"></div>
-      </div>
-      <div class="ticket-stamp">ANOTHER<br>YOU<br>✳</div>
-    </div>
-    <div class="ticket-actions">
-      <button class="primary" id="saveBtn">＋ 收藏這張票券</button>
-      <button class="secondary" id="againBtn">再抽一次</button>
-      <button class="text-btn" id="backBtn">重新選擇方向</button>
-    </div>
-  </section>
-
-  <section class="collection" id="collection">
-    <div class="collection-head"><h2>✳ 我的平行人生收藏</h2><button class="text-btn" id="clearCollection">清空收藏</button></div>
-    <div class="collection-list" id="collectionList"></div>
-  </section>
-
-  <nav class="bottom-nav">
-    <button id="collectionToggle">查看我的收藏</button>
-    <button id="resetBtn">重新開始</button>
+ <div class="wrap nav">
+  <a class="brand" href="#home" aria-label="回到首頁"><img src="images/logo.png" alt="167 公路與 308 老農夫標誌"><span>167 公路 × 308 老農夫</span></a>
+  <nav class="navlinks" id="navlinks" aria-label="主要導覽">
+   <a href="#about">認識公路</a><a href="#explore">沿途探索</a><a href="#308">308 老農夫</a><a href="#journey">我的旅程</a><a href="#travel">旅遊資訊</a>
   </nav>
-  <div class="footer">MADE OF CHOICES & WHAT-IFS · TAKE A CHANCE</div>
+  <a class="nav-cta" href="#explore">開始探索　↗</a>
+  <button class="menu-btn" id="menuBtn" aria-label="開啟選單" aria-expanded="false">☰</button>
+ </div>
+</header>
+
+<main>
+<section class="hero" id="home">
+ <div class="wrap hero-grid">
+  <div>
+   <div class="kicker">TAKE IT SLOW · TAINAN</div>
+   <h1>沿著 167，<span>慢慢看見地方。</span></h1>
+   <p class="hero-copy">一段從公路出發的探索。把目光放在山的線條、土地的紋理，也留一點時間給沿途的人與日常。從 167 公路走向 308 高地，認識自然地景與地方生活。</p>
+   <div class="hero-actions"><a class="btn" href="#explore">探索沿途景點 <span>↗</span></a><a class="btn secondary" href="#308">走進 308 老農夫</a></div>
+   <p class="hero-note">不是趕路的旅行，而是為沿途留下停留的理由。</p>
+  </div>
+  <div class="hero-photo">
+   <img src="images/hero-view.jpg" alt="山林與層疊山巒的遠景">
+   <div class="photo-tag">把風景，留給慢一點的自己。</div>
+   <div class="photo-caption">首頁照片｜使用提供的現場景觀影像</div>
+  </div>
+ </div>
+</section>
+
+<section class="intro-band" id="about">
+ <div class="wrap band-grid">
+  <strong>一條公路，<br>不只是一段距離。</strong>
+  <p>沿線的地景、植物、聚落與休憩場域，構成地方不同的觀看方式。這個網站以「探索」為起點，邀請你依照自己的興趣挑選景點，再把想去的地方收進旅程清單。</p>
+ </div>
+</section>
+
+<section class="section">
+ <div class="wrap">
+  <div class="section-head reveal"><div><div class="kicker">FIND YOUR WAY</div><h2>今天，想探索什麼？</h2></div><p>從主題開始認識沿途。選擇一種感興趣的方向，下方景點會依照分類切換。</p></div>
+  <div class="themes reveal">
+   <button class="theme active" data-theme="all"><span class="emoji">🧭</span><b>全部探索</b><small>看看沿途有哪些主題</small></button>
+   <button class="theme" data-theme="nature"><span class="emoji">🦋</span><b>自然生態</b><small>植物、蝴蝶與環境觀察</small></button>
+   <button class="theme" data-theme="land"><span class="emoji">⛰️</span><b>地景山色</b><small>月世界、山稜與遠景</small></button>
+   <button class="theme" data-theme="experience"><span class="emoji">🍕</span><b>特色場域</b><small>休憩空間與地方體驗</small></button>
+  </div>
+ </div>
+</section>
+
+<section class="section" id="explore" style="padding-top:12px">
+ <div class="wrap">
+  <div class="section-head reveal"><div><div class="kicker">EXPLORE THE ROAD</div><h2>沿途景點探索</h2></div><p>點開景點卡片，閱讀目前可確認的特色與觀察方向；也可以先加入「我的旅程」。資料尚未確認的部分會明確標示。</p></div>
+  <div class="filter-row">
+   <div class="filters" id="filters">
+    <button class="chip active" data-filter="all">全部</button><button class="chip" data-filter="nature">自然生態</button><button class="chip" data-filter="land">地景山色</button><button class="chip" data-filter="experience">特色場域</button>
+   </div>
+   <span class="count" id="spotCount">目前顯示 5 個探索項目</span>
+  </div>
+  <div class="spot-grid" id="spotGrid"></div>
+ </div>
+</section>
+
+<section class="section" id="308" style="background:#f1eddf">
+ <div class="wrap split">
+  <div class="split-visual reveal" aria-label="山林意象插畫"><span>🌿</span></div>
+  <div class="story-copy reveal">
+   <div class="kicker">A PLACE TO PAUSE</div>
+   <h2>308 老農夫，<br>讓旅程有了停留。</h2>
+   <p>308 高地與草山月世界周邊，除了開闊的山景，也有地方場域、自然觀察與人們日常活動的線索。這裡的介紹將「休憩站本身」與「周邊區域」分開呈現，避免把附近的資源誤認為休憩站內的設施。</p>
+   <p>目前資料提及老農夫生態廊道工作坊、披薩涼亭與 308 聚落等名稱；實際開放方式、服務內容與體驗安排，仍需向經營者確認。</p>
+   <div class="note-box">待補充資料：老農夫人物訪談、品牌經營故事、咖啡品項與製作方式、開放時間、聯絡方式，以及可否預約參觀或體驗。</div>
+  </div>
+ </div>
+</section>
+
+<section class="section" id="journey">
+ <div class="wrap">
+  <div class="planner reveal">
+   <div>
+    <div class="kicker">MY LITTLE TRIP</div><h2>把喜歡的地方，收進旅程。</h2>
+    <p>在景點卡片按下「加入旅程」，就能建立自己的探索清單。清單會保存在這台裝置的瀏覽器中。</p>
+    <div class="list-items" id="journeyList"><div class="empty">還沒有收藏景點，先到上方挑選想去的地方吧！</div></div>
+    <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:18px">
+     <button class="btn" id="clearJourney" type="button">清空清單</button>
+     <button class="btn secondary" id="copyJourney" type="button">複製我的清單</button>
+    </div>
+   </div>
+   <aside class="planner-side">
+    <h3>旅程規劃提醒</h3>
+    <p style="font-size:.9rem">目前先協助整理想去的地點，尚不自動計算距離、車程或最佳順序。</p>
+    <ul><li>精確地址與停車位置：待補充</li><li>各點之間距離與交通時間：待補充</li><li>店家開放、預約及體驗資訊：出發前確認</li><li>山區道路起伏，請留意天候與行車安全</li></ul>
+    <div class="note-box">待取得各景點定位、道路動線及交通資料後，再加入可靠的路線安排。</div>
+   </aside>
+  </div>
+ </div>
+</section>
+
+<section class="section" id="travel" style="padding-top:10px">
+ <div class="wrap">
+  <div class="section-head reveal"><div><div class="kicker">BEFORE YOU GO</div><h2>出發前，先做好準備。</h2></div><p>目前先整理通用的行前檢查方向；未經確認的地址、交通班次與營業資訊不會直接寫入網站。</p></div>
+  <div class="info-grid reveal">
+   <article class="info"><h3>🚗 交通與路線</h3><p>建議先確認目的地定位、道路狀況及停車空間。詳細大眾運輸、接駁與路線資訊：待補充資料。</p></article>
+   <article class="info"><h3>☀️ 天候與裝備</h3><p>出發前查看天氣，準備飲水、防曬用品與適合步行的鞋子；山區天候與能見度可能影響觀景。</p></article>
+   <article class="info"><h3>🌱 尊重環境</h3><p>觀察植物與動物時保持適當距離，不任意採摘、餵食或留下垃圾；行走時留意坡面與濕滑路段。</p></article>
+  </div>
+ </div>
+</section>
 </main>
+
+<footer class="footer"><div class="wrap footer-inner"><div><strong>167 公路 × 308 老農夫</strong><p>沿路慢慢看，發現地方的日常。</p></div><p>地方資料整理與旅遊探索網站｜內容持續補充中</p></div></footer>
+
+<div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+ <div class="modal-panel"><button class="modal-close" id="modalClose" aria-label="關閉">×</button><div id="modalContent"></div></div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <script>
-(() => {
-  const $ = id => document.getElementById(id);
-  const directions = ["冒險","創作","日常","未知"];
-  const stories = {
-    "冒險":[
-      ["沿海公路的旅行家","你在一座靠海的小鎮醒來，白天替旅人規劃路線，傍晚就騎著腳踏車去看夕陽。行李不多，故事很多。"],
-      ["山裡的咖啡店老闆","你離開熟悉的城市，在山腰開了一間小店。每天認識不同的人，也慢慢學會和自己相處。"],
-      ["四處採集靈感的人","你沒有固定的辦公室，生活像一張持續更新的地圖。每一次迷路，都意外帶你找到新的方向。"],
-      ["島嶼觀察員","你住在一座不太起眼的小島，記錄潮汐、植物和居民的故事。你發現世界比想像中更寬廣。"]
-    ],
-    "創作":[
-      ["獨立插畫工作者","你把腦袋裡的小宇宙畫成一張張圖。案子有時很趕，但每次看到作品被貼在陌生人的牆上，都覺得值得。"],
-      ["老屋改造設計師","你專門替舊空間找新生命，保留磨損的痕跡，也加入自己的想像。你相信不完美也是一種美。"],
-      ["深夜電台節目企劃","你用聲音收集城市裡的小故事。深夜收到聽眾的來信時，你知道自己的創作正悄悄陪伴某個人。"],
-      ["自己的工作室主人","你在一間灑滿陽光的小工作室工作，桌上永遠有沒完成的草稿。你不急著成為誰，只想做出喜歡的東西。"]
-    ],
-    "日常":[
-      ["巷口花店店員","你每天整理花束、記住熟客喜歡的顏色。生活沒有太多大事件，但你很擅長把平凡日子過得可愛。"],
-      ["小鎮圖書館員","你在安靜的書架間工作，偶爾替讀者找到一本剛好需要的書。你的生活緩慢，卻一點也不空白。"],
-      ["早餐店的神祕主廚","你研發出一份只有熟客知道的隱藏菜單。每天清晨很忙，但看見大家吃得滿足，就是你的成就感。"],
-      ["植物研究室助手","你照顧一整排植物，觀察它們細微的變化。你終於發現，有些成長真的急不來。"]
-    ],
-    "未知":[
-      ["城市裡的尋寶人","你開始收集城市裡被忽略的小東西：一張舊票根、一句塗鴉、一扇奇怪的窗。某天，它們拼成了新的故事。"],
-      ["意外走紅的神祕人物","你只是做了平常會做的事，卻意外被很多人看見。你一邊困惑，一邊發現原來自己的小堅持很有魅力。"],
-      ["流動的生活實驗家","你每個月替自己設定一個新挑戰。生活沒有標準答案，而你最喜歡的，就是還不知道下一站在哪裡。"],
-      ["平行世界的郵差","你負責把信送到不同版本的自己手上。每封信都提醒你：沒走過的路，也不代表不值得期待。"]
-    ]
-  };
-  let selected = "";
-  let current = null;
-  let busy = false;
-  let soundOn = true;
-  let audioCtx = null;
-  let saved = [];
-  try { saved = JSON.parse(localStorage.getItem("plvm_saved") || "[]"); } catch(e) { saved = []; }
+const spots = [
+ {id:"308-highland",name:"308 高地",category:"land",tag:"地景山色",emoji:"⛰️",tone:"gold",
+  intro:"以海拔約 308 公尺命名，是可眺望周邊丘陵及草山月世界的觀景地點。",
+  observe:"可留意遠方山稜的高低起伏、視野中的丘陵層次，以及不同天候下景色的變化。",
+  reminder:"觀景位置會受季節、天候、植被與視線遮蔽物影響；實際停留點、步行動線與安全範圍仍待現場盤點。",
+  status:"地景特色有公開資料支持；精確停留位置待補充。"},
+ {id:"moon-world",name:"草山月世界",category:"land",tag:"地景山色",emoji:"🌙",tone:"brown",
+  intro:"草山月世界以泥岩惡地地形為特色，可見裸露坡面、沖蝕溝與起伏山脊。",
+  observe:"觀察雨水沖蝕留下的溝紋、坡面裸露與植被分布，理解地表如何隨自然作用持續變化。",
+  reminder:"請在安全且允許的區域觀察，不攀爬裸露陡坡；實際步道與可進入範圍待補充。",
+  status:"地形特色有公開資料支持；建議補拍不同角度現場照片。"},
+ {id:"ecology",name:"老農夫生態廊道工作坊",category:"nature",tag:"自然生態",emoji:"🦋",tone:"",
+  intro:"地方盤點資料將老農夫生態廊道工作坊列為 308 高地路徑的特色據點，並提及蝴蝶步道與落葉、枯枝綠肥加工等體驗構想。",
+  observe:"可留意步道周邊植物、落葉層、枯枝與昆蟲活動。若要介紹蝴蝶種類或出現季節，需先有實際觀察紀錄。",
+  reminder:"目前文件包含體驗規劃內容，不能直接視為已常態開放的服務；物種、廊道位置及開放方式待確認。",
+  status:"據點名稱見於盤點資料；生態紀錄與實際服務待確認。"},
+ {id:"pizza",name:"披薩涼亭／窯烤場域",category:"experience",tag:"特色場域",emoji:"🍕",tone:"gold",
+  intro:"地方盤點資料提及披薩涼亭與老農夫窯烤共食的體驗構想，屬於 308 聚落特色場域的介紹線索。",
+  observe:"可進一步記錄窯體外觀、使用空間、座位與周邊環境，並確認是否有實際體驗活動。",
+  reminder:"窯烤活動、預約方式、費用、食材與安全規範均待經營者確認；未確認前請勿視為可直接參加。",
+  status:"場域名稱與體驗構想見於盤點資料；現況及開放資訊待補充。"},
+ {id:"308-cluster",name:"308 聚落與休憩場域",category:"experience",tag:"特色場域",emoji:"🏡",tone:"blue",
+  intro:"盤點資料以 308 聚落整體作為路徑節點，並提及老農夫、勤耕園、石頭藝術、披薩亭及鄰近楠木林等周邊線索。",
+  observe:"可從場域之間的關係、聚落環境、休憩空間與地方創作觀察地方生活樣貌。",
+  reminder:"各據點的範圍、彼此距離、是否開放及可參觀內容需逐一確認，不能將周邊資源一概視為休憩站內設施。",
+  status:"據點線索見於地方盤點文件；位置與參訪資訊待補充。"}
+];
+let currentFilter="all";
+let saved = new Set();
+try { saved = new Set(JSON.parse(localStorage.getItem("roadTripSaved")||"[]")); } catch(e) {}
 
-  function beep(freq=440, duration=.09, type="sine", volume=.045) {
-    if (!soundOn) return;
-    try {
-      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === "suspended") audioCtx.resume();
-      const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-      osc.type = type; osc.frequency.value = freq;
-      gain.gain.setValueAtTime(volume, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(.001, audioCtx.currentTime + duration);
-      osc.connect(gain); gain.connect(audioCtx.destination);
-      osc.start(); osc.stop(audioCtx.currentTime + duration);
-    } catch(e) {}
-  }
-  function setStatus(message){ $("status").textContent = message; }
-  function choose(direction) {
-    if (busy) return;
-    selected = direction;
-    document.querySelectorAll(".direction").forEach(btn => btn.classList.toggle("selected", btn.dataset.direction === direction));
-    $("startBtn").disabled = false;
-    setStatus("已選擇「" + direction + "」——準備好看看另一種可能了嗎？");
-    beep(520,.07);
-  }
-  document.querySelectorAll(".direction").forEach(btn => btn.addEventListener("click", () => choose(btn.dataset.direction)));
-  $("randomBtn").addEventListener("click", () => {
-    choose(directions[Math.floor(Math.random()*directions.length)]);
-    setStatus("命運替你選了「" + selected + "」！可以開始抽取了。");
-  });
-
-  function draw() {
-    if (busy) return;
-    if (!selected) { setStatus("先選一個人生方向，或讓我幫你決定吧！"); return; }
-    busy = true;
-    $("startBtn").disabled = true;
-    $("randomBtn").disabled = true;
-    $("coinSlot").textContent = "COIN ACCEPTED";
-    $("dispense").textContent = "PROCESSING...";
-    $("machineWindow").classList.add("spinning");
-    $("lever").classList.add("pulled");
-    $("ticketArea").classList.remove("show");
-    setStatus("販賣機正在讀取你的另一種可能……");
-    beep(220,.12,"square",.025);
-    setTimeout(() => beep(330,.12,"square",.025),180);
-    setTimeout(() => beep(440,.18,"triangle",.04),360);
-    setTimeout(() => {
-      const pool = stories[selected];
-      const item = pool[Math.floor(Math.random()*pool.length)];
-      current = {direction:selected,title:item[0],text:item[1],id:Date.now()};
-      $("resultTitle").textContent = current.title;
-      $("resultText").textContent = current.text;
-      $("resultMeta").textContent = "人生方向：" + selected + "　／　" + new Date().toLocaleDateString("zh-TW");
-      $("ticketNo").textContent = String(Math.floor(Math.random()*899)+100);
-      $("machineWindow").classList.remove("spinning");
-      $("lever").classList.remove("pulled");
-      $("dispense").textContent = "TICKET DISPENSED ✳";
-      $("ticketArea").classList.add("show");
-      setStatus("抽取完成！這是你在另一個世界的生活。");
-      $("saveBtn").textContent = "＋ 收藏這張票券";
-      $("saveBtn").disabled = false;
-      beep(660,.12,"sine",.05); setTimeout(()=>beep(880,.2,"sine",.04),110);
-      busy = false;
-      $("randomBtn").disabled = false;
-      $("ticketArea").scrollIntoView({behavior:"smooth",block:"nearest"});
-    },1050);
-  }
-  $("startBtn").addEventListener("click", draw);
-  $("againBtn").addEventListener("click", draw);
-  $("backBtn").addEventListener("click", resetChoice);
-  function resetChoice() {
-    if (busy) return;
-    $("ticketArea").classList.remove("show");
-    $("stepLabel").textContent = "STEP 01 / CHOOSE";
-    $("sectionTitle").textContent = "選一個你想走的方向";
-    $("sectionDesc").textContent = "投下一點好奇心，看看另一個版本的你，正在過著什麼樣的生活。";
-    $("directionList").classList.remove("hidden");
-    $("startBtn").classList.remove("hidden");
-    $("randomBtn").classList.remove("hidden");
-    selected = "";
-    document.querySelectorAll(".direction").forEach(btn=>btn.classList.remove("selected"));
-    $("startBtn").disabled = true;
-    $("coinSlot").textContent = "INSERT COIN";
-    $("dispense").textContent = "WAITING FOR YOU";
-    setStatus("請先選擇一個人生方向。");
-  }
-  $("resetBtn").addEventListener("click", () => {
-    resetChoice();
-    $("collection").classList.remove("show");
-    $("collectionToggle").textContent = "查看我的收藏";
-    window.scrollTo({top:0,behavior:"smooth"});
-  });
-  $("saveBtn").addEventListener("click", () => {
-    if (!current) return;
-    if (saved.some(item => item.id === current.id)) { setStatus("這張票券已經收藏過囉！"); return; }
-    saved.unshift(current);
-    try { localStorage.setItem("plvm_saved",JSON.stringify(saved)); } catch(e) {}
-    $("saveBtn").textContent = "✓ 已收藏";
-    $("saveBtn").disabled = true;
-    setStatus("收藏成功！你可以在下方的收藏清單再次查看。");
-    renderCollection(); beep(740,.1);
-  });
-  function renderCollection() {
-    const list = $("collectionList");
-    list.innerHTML = "";
-    if (!saved.length) { list.innerHTML = '<div class="empty">還沒有收藏的平行人生。抽到喜歡的結果，就把它留下來吧。</div>'; return; }
-    saved.forEach(item => {
-      const article = document.createElement("article");
-      article.className = "saved-item";
-      const title = document.createElement("strong"); title.textContent = item.title;
-      const detail = document.createElement("small"); detail.textContent = item.direction + " · " + item.text;
-      article.append(title,detail); list.append(article);
-    });
-  }
-  $("collectionToggle").addEventListener("click", () => {
-    const visible = $("collection").classList.toggle("show");
-    $("collectionToggle").textContent = visible ? "收起收藏" : "查看我的收藏";
-    renderCollection();
-    if (visible) $("collection").scrollIntoView({behavior:"smooth",block:"nearest"});
-  });
-  $("clearCollection").addEventListener("click", () => {
-    if (!saved.length) { setStatus("收藏清單目前是空的。"); return; }
-    if (!confirm("確定要清空所有收藏的票券嗎？")) return;
-    saved = [];
-    try { localStorage.removeItem("plvm_saved"); } catch(e) {}
-    renderCollection(); setStatus("收藏已清空。");
-  });
-  $("soundToggle").addEventListener("click", () => {
-    soundOn = !soundOn;
-    $("soundToggle").textContent = soundOn ? "♫ 音效 ON" : "♫ 音效 OFF";
-    $("soundToggle").setAttribute("aria-pressed",String(soundOn));
-    if (soundOn) beep(600,.1);
-  });
-  renderCollection();
-})();
+const grid=document.getElementById("spotGrid");
+const count=document.getElementById("spotCount");
+const journeyList=document.getElementById("journeyList");
+const modal=document.getElementById("detailModal");
+const toast=document.getElementById("toast");
+function notify(msg){toast.textContent=msg;toast.classList.add("show");clearTimeout(notify.t);notify.t=setTimeout(()=>toast.classList.remove("show"),2100)}
+function persist(){localStorage.setItem("roadTripSaved",JSON.stringify([...saved]));renderJourney();renderSpots()}
+function renderSpots(){
+ const shown=spots.filter(s=>currentFilter==="all"||s.category===currentFilter);
+ count.textContent=`目前顯示 ${shown.length} 個探索項目`;
+ grid.innerHTML=shown.map(s=>`<article class="spot reveal visible">
+  <div class="spot-art ${s.tone}"><small>${s.tag}</small><span>${s.emoji}</span></div>
+  <div class="spot-body"><h3>${s.name}</h3><p>${s.intro}</p>
+   <div class="spot-actions"><button class="mini-btn" data-detail="${s.id}">了解更多 ↗</button><button class="mini-btn save ${saved.has(s.id)?"saved":""}" data-save="${s.id}">${saved.has(s.id)?"✓ 已加入":"＋ 加入旅程"}</button></div>
+   <div class="status">${s.status}</div>
+  </div></article>`).join("");
+}
+function renderJourney(){
+ const items=spots.filter(s=>saved.has(s.id));
+ journeyList.innerHTML=items.length?items.map(s=>`<div class="list-item"><span>${s.emoji} ${s.name}</span><button data-remove="${s.id}">移除 ×</button></div>`).join(""):'<div class="empty">還沒有收藏景點，先到上方挑選想去的地方吧！</div>';
+}
+function showDetail(id){
+ const s=spots.find(x=>x.id===id);if(!s)return;
+ document.getElementById("modalContent").innerHTML=`<div class="kicker">${s.tag}</div><h2 id="modalTitle">${s.emoji} ${s.name}</h2><p>${s.intro}</p><h3>可以觀察什麼？</h3><p>${s.observe}</p><h3>旅遊提醒</h3><p>${s.reminder}</p><div class="note-box">${s.status}</div><button class="btn" style="margin-top:20px" data-save="${s.id}">${saved.has(s.id)?"✓ 已加入旅程":"＋ 加入我的旅程"}</button>`;
+ modal.classList.add("open");document.body.style.overflow="hidden";
+}
+function closeModal(){modal.classList.remove("open");document.body.style.overflow=""}
+document.addEventListener("click",e=>{
+ const f=e.target.closest("[data-filter]");if(f){currentFilter=f.dataset.filter;document.querySelectorAll("[data-filter]").forEach(b=>b.classList.toggle("active",b===f));document.querySelectorAll(".theme").forEach(b=>b.classList.toggle("active",b.dataset.theme===currentFilter));renderSpots()}
+ const t=e.target.closest("[data-theme]");if(t){currentFilter=t.dataset.theme;document.querySelectorAll(".theme").forEach(b=>b.classList.toggle("active",b===t));document.querySelectorAll(".chip").forEach(b=>b.classList.toggle("active",b.dataset.filter===currentFilter));renderSpots();document.getElementById("explore").scrollIntoView({behavior:"smooth"})}
+ const d=e.target.closest("[data-detail]");if(d)showDetail(d.dataset.detail);
+ const s=e.target.closest("[data-save]");if(s){const id=s.dataset.save;saved.has(id)?saved.delete(id):saved.add(id);persist();if(modal.classList.contains("open"))showDetail(id);notify(saved.has(id)?"已加入我的旅程":"已從旅程移除")}
+ const r=e.target.closest("[data-remove]");if(r){saved.delete(r.dataset.remove);persist();notify("已移除景點")}
+});
+document.getElementById("modalClose").addEventListener("click",closeModal);
+modal.addEventListener("click",e=>{if(e.target===modal)closeModal()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+document.getElementById("clearJourney").addEventListener("click",()=>{if(!saved.size){notify("清單目前是空的");return}saved.clear();persist();notify("已清空旅程清單")});
+document.getElementById("copyJourney").addEventListener("click",async()=>{
+ const names=spots.filter(s=>saved.has(s.id)).map((s,i)=>`${i+1}. ${s.name}`);
+ if(!names.length){notify("請先加入想去的景點");return}
+ const text="我的 167 公路 × 308 老農夫旅程\n"+names.join("\n")+"\n\n提醒：詳細地址、交通與開放資訊請出發前確認。";
+ try{await navigator.clipboard.writeText(text);notify("旅程清單已複製")}catch(e){notify("瀏覽器不允許自動複製，請改用手動選取")}
+});
+const menuBtn=document.getElementById("menuBtn"),navlinks=document.getElementById("navlinks");
+menuBtn.addEventListener("click",()=>{const open=navlinks.classList.toggle("open");menuBtn.setAttribute("aria-expanded",String(open));menuBtn.textContent=open?"×":"☰"});
+navlinks.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{navlinks.classList.remove("open");menuBtn.setAttribute("aria-expanded","false");menuBtn.textContent="☰"}));
+const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("visible");observer.unobserve(entry.target)}}),{threshold:.12});
+document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
+renderSpots();renderJourney();
 </script>
 </body>
 </html>
